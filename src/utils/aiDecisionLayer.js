@@ -5,7 +5,10 @@ import { calendarCore } from './calendarSystem'
 class AIDecisionLayer {
   constructor() {
     this.groqApiKey = import.meta.env.VITE_GROQ_API_KEY
-    this.groqApiUrl = 'https://api.groq.com/openai/v1/chat/completions'
+    // Use proxy endpoint to avoid CORS issues in production
+    this.groqApiUrl = window.location.hostname === 'localhost' 
+      ? 'https://api.groq.com/openai/v1/chat/completions'
+      : '/api/groq-proxy'
     this.model = 'llama-3.1-8b-instant' // Fast Groq model (560 T/sec)
     this.fallbackModel = 'llama-3.3-70b-versatile' // Backup model if primary fails
     this.maxRetries = 3
@@ -19,6 +22,7 @@ class AIDecisionLayer {
     }
 
     const modelToUse = useBackupModel ? this.fallbackModel : this.model
+    const isUsingProxy = this.groqApiUrl.startsWith('/api/')
 
     const requestBody = {
       model: modelToUse,
@@ -31,12 +35,18 @@ class AIDecisionLayer {
 
     for (let attempt = 1; attempt <= this.maxRetries; attempt++) {
       try {
+        const headers = {
+          'Content-Type': 'application/json'
+        }
+
+        // Only add Authorization header for direct API calls, not proxy
+        if (!isUsingProxy) {
+          headers['Authorization'] = `Bearer ${this.groqApiKey}`
+        }
+
         const response = await fetch(this.groqApiUrl, {
           method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${this.groqApiKey}`,
-            'Content-Type': 'application/json'
-          },
+          headers,
           body: JSON.stringify(requestBody)
         })
 
