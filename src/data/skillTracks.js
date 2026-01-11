@@ -1,5 +1,28 @@
 // Skill War Room - Fixed 4-Week Initial Curriculum
 export const skillTracksData = {
+  linux: {
+    id: 'linux',
+    name: 'Linux Fundamentals',
+    icon: '🐧',
+    color: 'cyber-blue',
+    weeks: [
+      {
+        weekNumber: 1,
+        title: 'Linux Foundation',
+        goal: 'Master essential Linux system concepts',
+        dailyTasks: [
+          { day: 'Monday', task: 'Filesystem structure & navigation (/, /home, /etc)', difficulty: 2, minTime: 20 },
+          { day: 'Tuesday', task: 'Basic CLI commands (ls, cd, pwd, mkdir, rm)', difficulty: 2, minTime: 20 },
+          { day: 'Wednesday', task: 'File permissions & ownership (chmod, chown)', difficulty: 3, minTime: 20 },
+          { day: 'Thursday', task: 'Process management (ps, top, kill)', difficulty: 3, minTime: 20 },
+          { day: 'Friday', task: 'Package management (apt/yum basics)', difficulty: 3, minTime: 20 },
+          { day: 'Saturday', task: 'System information commands (uname, df, free)', difficulty: 2, minTime: 15 },
+          { day: 'Sunday', task: 'Practice session: Navigate & manage files', difficulty: 3, minTime: 20 }
+        ],
+        emergencyTask: 'Practice 3 basic Linux commands (10 min)'
+      }
+    ]
+  },
   bash: {
     id: 'bash',
     name: 'Bash / Shell Scripting',
